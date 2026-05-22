@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Întrebări la o Ceașcă de Cafea</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --espresso: #1a0f07;
+      --dark-roast: #2c1a0e;
+      --caramel: #c07a3a;
+      --cream: #f5e6d0;
+      --foam: #fdf6ee;
+      --steam: rgba(245, 230, 208, 0.15);
+      --gold: #d4a042;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--espresso);
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(192,122,58,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(192,122,58,0.08) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      font-family: 'Lora', serif;
+      color: var(--cream);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeDown 0.9s ease both;
+    }
+
+    .cup-icon {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 18px rgba(192,122,58,0.5));
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--cream);
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: rgba(245,230,208,0.55);
+      letter-spacing: 0.06em;
+      font-style: italic;
+    }
+
+    /* CARD */
+    .card {
+      background: linear-gradient(145deg, var(--dark-roast), #1e1209);
+      border: 1px solid rgba(192,122,58,0.25);
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      padding: 40px 36px;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(245,230,208,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.7;
+    }
+
+    /* PROGRESS */
+    .progress-bar-wrap {
+      margin-bottom: 28px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: rgba(245,230,208,0.4);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .progress-bar {
+      height: 3px;
+      background: rgba(245,230,208,0.1);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--caramel), var(--gold));
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* QUESTION */
+    .question-area {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .question-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+      line-height: 1.6;
+      text-align: center;
+      color: var(--foam);
+      animation: fadeIn 0.5s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* OPTIONS */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .opt-btn {
+      background: rgba(245,230,208,0.04);
+      border: 1px solid rgba(192,122,58,0.2);
+      border-radius: 12px;
+      color: var(--cream);
+      font-family: 'Lora', serif;
+      font-size: 0.95rem;
+      padding: 14px 20px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .opt-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(192,122,58,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .opt-btn:hover:not(:disabled)::before { opacity: 1; }
+    .opt-btn:hover:not(:disabled) {
+      border-color: var(--caramel);
+      transform: translateX(4px);
+    }
+
+    .opt-btn.selected {
+      border-color: var(--gold);
+      background: rgba(212,160,66,0.12);
+    }
+
+    .opt-btn:disabled { cursor: default; }
+
+    .opt-letter {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      background: rgba(192,122,58,0.25);
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 10px;
+      letter-spacing: 0;
+      color: var(--gold);
+      vertical-align: middle;
+    }
+
+    /* REFLECTION */
+    .reflection {
+      background: rgba(192,122,58,0.08);
+      border-left: 3px solid var(--caramel);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 18px;
+      margin-bottom: 28px;
+      font-style: italic;
+      font-size: 0.92rem;
+      color: rgba(245,230,208,0.8);
+      line-height: 1.6;
+      animation: fadeIn 0.4s ease both;
+      display: none;
+    }
+
+    .reflection.visible { display: block; }
+
+    /* NEXT BTN */
+    .next-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--caramel), var(--gold));
+      border: none;
+      border-radius: 12px;
+      color: var(--espresso);
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(192,122,58,0.3);
+      display: none;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(192,122,58,0.4);
+    }
+
+    .next-btn.visible { display: block; }
+
+    /* FINAL SCREEN */
+    .final-screen {
+      text-align: center;
+      display: none;
+      animation: fadeIn 0.6s ease both;
+    }
+
+    .final-screen.visible { display: block; }
+
+    .final-icon { font-size: 56px; margin-bottom: 16px; }
+
+    .final-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .final-msg {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(245,230,208,0.75);
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .restart-btn {
+      padding: 14px 36px;
+      background: transparent;
+      border: 1px solid var(--caramel);
+      border-radius: 12px;
+      color: var(--caramel);
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: all 0.25s;
+    }
+
+    .restart-btn:hover {
+      background: rgba(192,122,58,0.12);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .question-wrap { }
+    .question-wrap.hidden { display: none; }
+
+    footer {
+      margin-top: 28px;
+      font-size: 0.78rem;
+      color: rgba(245,230,208,0.2);
+      letter-spacing: 0.06em;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="cup-icon">☕</span>
+  <h1>Întrebări la o <em>Ceașcă de Cafea</em></h1>
+  <p class="subtitle">Reflecții despre viață, una câte una</p>
+</header>
+
+<div class="card">
+
+  <!-- QUESTION VIEW -->
+  <div class="question-wrap" id="questionWrap">
+    <div class="progress-bar-wrap">
+      <div class="progress-meta">
+        <span id="qCounter">Întrebarea 1 din 10</span>
+        <span id="qPct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="question-area">
+      <p class="question-text" id="questionText"></p>
+    </div>
+
+    <div class="options" id="optionsContainer"></div>
+
+    <div class="reflection" id="reflection"></div>
+
+    <button class="next-btn" id="nextBtn">Următoarea întrebare →</button>
+  </div>
+
+  <!-- FINAL VIEW -->
+  <div class="final-screen" id="finalScreen">
+    <div class="final-icon">🌙</div>
+    <h2 class="final-title">Cafeaua s-a terminat.</h2>
+    <p class="final-msg" id="finalMsg"></p>
+    <button class="restart-btn" onclick="restart()">☕ Toarnă o altă ceașcă</button>
+  </div>
+
+</div>
+
+<footer>fiecare înghițitură e o întrebare nouă</footer>
+
+<script>
+  const questions = [
+    {
+      q: "Dacă ai putea trăi o singură zi din nou, care ar fi aceea și de ce?",
+      options: ["O zi de copilărie fericită", "O zi cu cineva drag, acum pierdut", "Cea mai mare realizare a mea", "O zi complet banală, dar liniștită"],
+      reflections: [
+        "Copilăria ne amintește că bucuria nu are nevoie de motive.",
+        "Dragostea nu dispare odată cu oamenii. Ea rămâne în noi.",
+        "Să te mândrești cu tine însuți este unul dintre cele mai curate sentimente.",
+        "Poate că liniștea e mai valoroasă decât ne dăm seama în haosul zilnic."
+      ]
+    },
+    {
+      q: "Ce lucru ai amânat de mult timp și știi că ar schimba ceva în bine?",
+      options: ["O conversație importantă cu cineva", "Un proiect sau hobby personal", "Să am grijă mai mult de sănătatea mea", "Să iert pe cineva (sau pe mine însumi)"],
+      reflections: [
+        "Cuvintele nespuse cântăresc mai mult decât credem.",
+        "Creativitatea nu expiră, dar regretele se acumulează.",
+        "Corpul ne poartă prin viață. Merită respect.",
+        "Iertarea nu e pentru celălalt — e pentru propria ta pace."
+      ]
+    },
+    {
+      q: "Ce îți dă energie și ce îți consumă energia cel mai mult?",
+      options: ["Oamenii — unii mă încarcă, alții mă golesc", "Munca și presiunea zilnică", "Gândurile mele interioare", "Haosul din jur pe care nu îl controlez"],
+      reflections: [
+        "Alegem cu cine împărțim energia — e o decizie mai importantă decât pare.",
+        "Uneori munca e sens; alteori e doar zgomot de fundal.",
+        "Mintea poate fi cel mai bun prieten sau cel mai dificil dușman.",
+        "Nu putem controla totul — dar putem controla cum răspundem."
+      ]
+    },
+    {
+      q: "Dacă versiunea ta de acum 5 ani te-ar vedea astăzi, ce ar simți?",
+      options: ["Mândrie — am crescut mult", "Surpriză — nu mă așteptam la asta", "Îngrijorare — nu e ce visam", "Ușurare — am supraviețuit"],
+      reflections: [
+        "Creșterea e rareori liniară, dar e reală.",
+        "Viața ne duce pe drumuri neașteptate — uneori mai frumoase.",
+        "Visele se schimbă. Asta nu e eșec, e evoluție.",
+        "A supraviețui e uneori cel mai curajos lucru pe care îl facem."
+      ]
+    },
+    {
+      q: "Ce înseamnă pentru tine o viață bine trăită?",
+      options: ["Să iubesc și să fiu iubit", "Să creez ceva care rămâne", "Să trăiesc prezentul cu intensitate", "Să las lumea puțin mai bună"],
+      reflections: [
+        "Conexiunea umană e poate singurul lucru cu adevărat esențial.",
+        "Ceea ce creăm ne supraviețuiește — e un fel de nemurire.",
+        "Prezentul e singurul moment real pe care îl avem.",
+        "Bunătatea, chiar mică, are ecouri lungi."
+      ]
+    },
+    {
+      q: "Care este cea mai mare frică a ta în legătură cu viitorul?",
+      options: ["Să fiu singur", "Să ratez ceva important", "Să nu fiu suficient de bun", "Să pierd pe cineva drag"],
+      reflections: [
+        "Singurătatea ne înspăimântă tocmai pentru că ne amintim cât de bine e să nu fim singuri.",
+        "Frica de ratare vine din dorința de a conta — e un semn că îți pasă.",
+        "Suficiența nu vine din exterior. Vine din cum te privești tu pe tine.",
+        "Iubim profund tocmai pentru că știm că pierderea e posibilă."
+      ]
+    },
+    {
+      q: "Cum arată o zi perfectă pentru tine?",
+      options: ["Lentă, cu cafea, cărți și liniște", "Plină de aventură și noutate", "Înconjurat de oameni dragi", "Productivă — cu sens și realizări"],
+      reflections: [
+        "Lentoarea e un lux pe care uneori trebuie să ni-l permitem.",
+        "Aventura ne amintește că suntem vii.",
+        "Oamenii sunt patria noastră portabilă.",
+        "Sensul transformă efortul în bucurie."
+      ]
+    },
+    {
+      q: "Ce lecție de viață ai vrea să o înveți mai devreme?",
+      options: ["Că nu poți mulțumi pe toată lumea", "Că greșelile sunt parte din drum", "Că timpul e cel mai prețios lucru", "Că meriti să fii fericit"],
+      reflections: [
+        "Eliberarea de opinia altora e una dintre cele mai mari libertăți.",
+        "Fiecare greșeală e o lecție scrisă direct pe viața ta.",
+        "Timpul cheltuit pe lucruri mici e tot timp — cheltuiește-l bine.",
+        "Fericirea nu e un premiu. E un drept."
+      ]
+    },
+    {
+      q: "Ce relație din viața ta îți aduce cel mai mult confort?",
+      options: ["Un prieten vechi care mă cunoaște complet", "Familia, cu toate imperfecțiunile ei", "Partenerul meu de viață", "Relația cu mine însumi"],
+      reflections: [
+        "Prietenia veche e ca un vin bun — cu cât trece timpul, cu atât e mai valoroasă.",
+        "Familia e complicată, dar e rădăcina de unde creștem.",
+        "A găsi pe cineva care rămâne — e o minune mică și imensă.",
+        "Cel mai lung parteneriat din viața ta e cu propria persoană."
+      ]
+    },
+    {
+      q: "Dacă ai scrie o scrisoare pentru tine din viitor, cu ce ai începe?",
+      options: ["«Ai reușit mai mult decât credeai»", "«Unele griji au fost în van — iartă-te»", "«Oamenii au contat mai mult decât lucrurile»", "«Ți-ai trăit viața, nu viața altcuiva»"],
+      reflections: [
+        "Uneori avem nevoie să ne amintim că suntem capabili de mai mult decât ne gândim.",
+        "Anxietatea viitorului ne fură prezentul. Meritem să fim mai blânzi cu noi.",
+        "La final, amintirile cu oameni prețioși sunt tot ce rămâne.",
+        "Autenticitatea e cel mai curajos mod de a exista."
+      ]
+    }
+  ];
+
+  let current = 0;
+  let selected = null;
+
+  function render() {
+    const q = questions[current];
+    const total = questions.length;
+
+    document.getElementById('qCounter').textContent = `Întrebarea ${current + 1} din ${total}`;
+    document.getElementById('qPct').textContent = `${Math.round((current / total) * 100)}%`;
+    document.getElementById('progressFill').style.width = `${(current / total) * 100}%`;
+
+    const qEl = document.getElementById('questionText');
+    qEl.style.animation = 'none';
+    void qEl.offsetWidth;
+    qEl.style.animation = '';
+    qEl.textContent = q.q;
+
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt}`;
+      btn.onclick = () => selectOption(i);
+      container.appendChild(btn);
+    });
+
+    document.getElementById('reflection').classList.remove('visible');
+    document.getElementById('reflection').textContent = '';
+    document.getElementById('nextBtn').classList.remove('visible');
+    selected = null;
+  }
+
+  function selectOption(i) {
+    if (selected !== null) return;
+    selected = i;
+
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (idx === i) btn.classList.add('selected');
+    });
+
+    const ref = document.getElementById('reflection');
+    ref.textContent = questions[current].reflections[i];
+    ref.classList.add('visible');
+
+    const nextBtn = document.getElementById('nextBtn');
+    const isLast = current === questions.length - 1;
+    nextBtn.textContent = isLast ? 'Termină jocul ☕' : 'Următoarea întrebare →';
+    nextBtn.classList.add('visible');
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    current++;
+    if (current >= questions.length) {
+      showFinal();
+    } else {
+      render();
+    }
+  });
+
+  function showFinal() {
+    document.getElementById('questionWrap').classList.add('hidden');
+    const final = document.getElementById('finalScreen');
+    final.classList.add('visible');
+
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('qPct').textContent = '100%';
+
+    const msgs = [
+      "Ai ajuns la capătul ceștii. Sper că aceste întrebări ți-au adus puțin mai multă claritate sau, cel puțin, o pauză de la zgomot.",
+      "Uneori, cele mai importante conversații sunt cele pe care le ai cu tine însuți.",
+      "Cafeaua s-a răcit, dar gândurile rămân. Asta e tot ce contează."
+    ];
+    document.getElementById('finalMsg').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+  }
+
+  function restart() {
+    current = 0;
+    selected = null;
+    document.getElementById('finalScreen').classList.remove('visible');
+    document.getElementById('questionWrap').classList.remove('hidden');
+    render();
+  }
+
+  render();
+</script>
+</body>
+</html>
